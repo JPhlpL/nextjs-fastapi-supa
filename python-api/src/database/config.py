@@ -11,7 +11,7 @@ def get_database_url() -> str:
     """
     Retrieves the database URL from environment variables.
     """
-    return os.getenv("MYSQL_DB_CONNECTION_WITH_PASSWORD")
+    return os.getenv("POSTGRE_DB_CONNECTION_WITH_PASSWORD")
 
 def get_database_engine() -> Engine:
     """

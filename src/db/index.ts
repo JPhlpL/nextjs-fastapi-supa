@@ -1,13 +1,10 @@
 // src/db/index.ts
-import { drizzle, MySql2DrizzleConfig } from 'drizzle-orm/mysql2';
-import mysql from 'mysql2/promise';
-import * as schema from '@/db/schema';
+import { drizzle } from 'drizzle-orm/postgres-js'; // Import PostgreSQL drizzle
+import postgres from 'postgres'; // Import the postgres driver
+import * as schema from '@/db/schema'; // Import your schema
 
-const connection = mysql.createPool(process.env.DATABASE_URL!);
+// Create a PostgreSQL connection pool
+const connection = postgres(process.env.SUPABASE_DATABASE_URL!); // Use your PostgreSQL connection string
 
-const config: MySql2DrizzleConfig<typeof schema> = {
-  schema,
-  mode: process.env.NODE_ENV === 'production' ? 'default' : 'default', // Use 'default' for regular MySQL
-};
-
-export const db = drizzle(connection, config);
+// Initialize the Drizzle ORM instance
+export const db = drizzle(connection, { schema });
