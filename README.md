@@ -43,3 +43,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Generate JWT Secret
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+Samples:
+![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
