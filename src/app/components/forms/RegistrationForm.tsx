@@ -10,6 +10,7 @@ import { postData } from "@/utils/helpers";
 import { UserRegistration } from "@/types";
 import { Mail, UserIcon, Lock } from 'lucide-react';
 import Image from 'next/image';
+import { signup } from '@/app/login/action'
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState<UserRegistration>({
@@ -35,7 +36,14 @@ export default function RegistrationForm() {
       });
 
       if (response) {
-        router.push("/login");
+         // Create a FormData object
+         const formDataToSend = new FormData();
+         formDataToSend.append('email', formData.email);
+         formDataToSend.append('password', formData.password);
+ 
+         // Call the signup function with the FormData object
+         await signup(formDataToSend);
+         router.push('/login')
       } else {
         setError(error || "An error occurred during registration");
       }
@@ -71,6 +79,7 @@ export default function RegistrationForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+          {/* <form className="space-y-6"> */}
             <div className="relative">
               <Label htmlFor="email" className="sr-only">
                 Email
@@ -78,6 +87,7 @@ export default function RegistrationForm() {
               <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="Email"
                 value={formData.email}
@@ -94,6 +104,7 @@ export default function RegistrationForm() {
               <UserIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
                 id="username"
+                name="username"
                 type="text"
                 placeholder="Username"
                 value={formData.username}
@@ -110,6 +121,7 @@ export default function RegistrationForm() {
               <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Password"
                 value={formData.password}

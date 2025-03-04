@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Lock } from 'lucide-react';
 import Image from 'next/image';
+import { login } from '@/app/login/action'
+
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
@@ -19,11 +21,13 @@ export default function LoginForm() {
     event.preventDefault();
     setError("");
 
+    
+
     try {
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username }),
       });
 
       const data = await response.json();
@@ -65,13 +69,15 @@ export default function LoginForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+          {/* <form className="space-y-6"> */}
             <div className="relative">
               <Label htmlFor="username" className="sr-only">
                 Username
               </Label>
               <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
-                id="username"
+                id="email"
+                name="email"
                 type="text"
                 placeholder="Username or Email"
                 value={username}
@@ -88,6 +94,7 @@ export default function LoginForm() {
               <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -113,6 +120,7 @@ export default function LoginForm() {
             <Button
               type="submit"
               className="w-full bg-gray-700 hover:bg-gray-700 text-white py-6 rounded-full"
+              formAction={login}
             >
               LOGIN
             </Button>

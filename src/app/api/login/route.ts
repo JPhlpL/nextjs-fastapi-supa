@@ -12,7 +12,7 @@ if (!JWT_SECRET) {
 }
 
 export async function POST(request: Request) {
-  const { username, password } = await request.json()
+  const { username } = await request.json()
 
   const user = await db.select().from(users)
                .where(or(eq(users.username, username), eq(users.email, username)))
@@ -20,12 +20,6 @@ export async function POST(request: Request) {
 
   if (user.length === 0) {
     return NextResponse.json({ error: 'User Not Found' }, { status: 404 })
-  }
-
-  const isPasswordValid = await bcrypt.compare(password, user[0].password)
-
-  if (!isPasswordValid) {
-    return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
   }
 
   const secret = new TextEncoder().encode(JWT_SECRET)
