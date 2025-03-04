@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1727513668981,
+      "tag": "0000_smiling_shen",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1737015603534,
+      "tag": "0001_curvy_satana",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1737015952099,
+      "tag": "0002_neat_loki",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1737017971680,
+      "tag": "0003_superb_wallop",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1737968399833,
+      "tag": "0004_confused_maestro",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1738297955251,
+      "tag": "0005_spooky_hardball",
+      "breakpoints": true
+    }
+  ]
+}
