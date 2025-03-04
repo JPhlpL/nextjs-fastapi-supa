@@ -26,25 +26,9 @@ class Role(BaseModel):
     updatedAt: Optional[datetime] = None
     class Config:
         from_attributes = True
-        
-class Employee(BaseModel):
-    id: UUID
-    employeeId: str
-    firstName: str
-    lastName: str
-    department: str
-    section: str
-    position: str
-    jobLevel: str
-    serviceYears: int
-    dateHired: datetime
-    createdAt: datetime
-    updatedAt: datetime
-
 class UserInfo(BaseModel):
     
     user_info: UserLite
-    employee_info: Employee
     class Config:
         from_attributes = True
 

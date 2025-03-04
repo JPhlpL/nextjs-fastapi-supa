@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from src.services.userService import UserService
-from src.services.employeeService import EmployeeService
 from src.schemas.schemas import (
     User as UserSchema,
     UserInfo as UserInfoSchema
@@ -56,19 +55,14 @@ async def get_user_endpoint(user_id: UUID, user_service: UserService = Depends()
 @router.get("/get-user-info/{username}", response_model=UserInfoSchema)
 async def get_user_info_endpoint(
     username: str, 
-    user_service: UserService = Depends(),
-    employee_service: EmployeeService = Depends()
+    user_service: UserService = Depends()
 ):
     try:
         user =  user_service.get_user_by_username(username)
-        employee = employee_service.get_employee(username)
-        
         user_model = user_service.transform_user_model_to_schema(user)
-        employee_model = employee_service.transform_employee_model_to_schema(employee)
     
         response = UserInfoSchema(
-            user_info=user_model,
-            employee_info=employee_model
+            user_info=user_model
         )
         
         return response

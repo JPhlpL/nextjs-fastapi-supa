@@ -54,9 +54,6 @@ export default function Sidebar() {
     <div className="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
       <nav>
         <NavLink href="/home" icon={Home}>Home</NavLink>
-       
-        <NavLink href="/retirement" icon={Calculator}>Retirement Computation</NavLink>
-        <NavLink href="/overtime" icon={Calculator}>Overtime Computation</NavLink>
         <NavLink href="/contact" icon={Contact}>Contact</NavLink>
         <NavLink href="/manual" icon={Book}>Manual</NavLink>
         <NavLink href="/calendar" icon={Calendar}>Calendar</NavLink>

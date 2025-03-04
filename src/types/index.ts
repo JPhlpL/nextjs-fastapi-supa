@@ -22,20 +22,6 @@ export interface ApiError {
     password: string;
   }
 
-  export interface Employee {
-    id: string;
-    employeeId: string;
-    firstName: string;
-    lastName: string;
-    department: string;
-    section: string;
-    position: string;
-    jobLevel: string;
-    serviceYears: number;
-    dateHired: string;
-    createdAt: string;
-    updatedAt: string;
-  }
   export interface Role {
     id: string;
     title: string;
@@ -46,7 +32,6 @@ export interface ApiError {
   
   export interface UserInfo {
     user_info: UserLite;
-    employee_info: Employee
   }
 
 

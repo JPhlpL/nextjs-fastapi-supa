@@ -27,23 +27,6 @@ class Role(Base):
     createdAt = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
-
-class Employee(Base):
-    __tablename__ = 'employees'
-
-    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    employeeId = Column(String(150), unique=True, nullable=False)
-    firstName = Column(String(100), unique=False, nullable=False)
-    lastName = Column(String(255), unique=False, nullable=False)
-    department = Column(String(150), unique=False, nullable=False)
-    section = Column(String(150), unique=False, nullable=False)
-    position = Column(String(150), unique=False, nullable=False)
-    jobLevel = Column(String(150), unique=False, nullable=False)
-    serviceYears = Column(Integer, unique=False, nullable=False)
-    dateHired = Column(DateTime) 
-    createdAt = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # Timezone-aware datetime
-    updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-   
 # class Permission(Base):
 #     __tablename__ = 'permissions'
 

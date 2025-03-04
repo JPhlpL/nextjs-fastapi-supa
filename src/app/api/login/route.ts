@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/db'
 import { users } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, or } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 import * as jose from 'jose'
 
@@ -14,10 +14,12 @@ if (!JWT_SECRET) {
 export async function POST(request: Request) {
   const { username, password } = await request.json()
 
-  const user = await db.select().from(users).where(eq(users.username, username)).limit(1)
+  const user = await db.select().from(users)
+               .where(or(eq(users.username, username), eq(users.email, username)))
+               .limit(1);
 
   if (user.length === 0) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    return NextResponse.json({ error: 'User Not Found' }, { status: 404 })
   }
 
   const isPasswordValid = await bcrypt.compare(password, user[0].password)
