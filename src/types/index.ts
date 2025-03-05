@@ -5,20 +5,16 @@ export interface ApiError {
   export interface User {
     id: string;
     email: string;
-    username: string;
-    password: string;
     createdAt: string;
     updatedAt: string; // Ensure this is spelled correctly
   }
 
   export interface UserLite {
     email: string;
-    username: string;
   }
 
   export interface UserRegistration {
     email: string;
-    username: string;
     password: string;
   }
 

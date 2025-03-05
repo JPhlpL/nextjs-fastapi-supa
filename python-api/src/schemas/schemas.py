@@ -5,8 +5,6 @@ from uuid import UUID
 class User(BaseModel):
     id: Optional[UUID] = None
     email: str
-    username: str
-    password: Optional[str] = None
     createdAt: Optional[datetime] = None
     updatedAt: Optional[datetime] = None
     class Config:
@@ -14,7 +12,6 @@ class User(BaseModel):
     
 class UserLite(BaseModel):
     email: str
-    username: str
     class Config:
         from_attributes = True
 

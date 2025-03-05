@@ -1,9 +1,20 @@
-import { NextResponse } from 'next/server';
+import { redirect } from 'next/navigation'
+import { createClient } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
-export async function POST() {
-  // Clear the authentication cookies or tokens
-  const response = NextResponse.json({ message: 'Logged out successfully' });
-  response.cookies.set('token', '', { maxAge: 0, path: '/', httpOnly: true, sameSite: 'strict' });
-
-  return response;
+export async function GET() {
+  const supabase = await createClient()
+  
+  // Sign out from Supabase
+  await supabase.auth.signOut()
+  
+  // Clear all cookies to ensure complete logout
+  const cookieStore = cookies()
+  cookieStore.getAll().forEach(cookie => {
+    cookieStore.delete(cookie.name)
+  })
+  
+  // Redirect to login page
+  return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'))
 }

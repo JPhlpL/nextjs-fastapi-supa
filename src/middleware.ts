@@ -1,71 +1,71 @@
-// import { NextResponse } from 'next/server'
-// import type { NextRequest } from 'next/server'
-// import * as jose from 'jose'
-
-// const JWT_SECRET = process.env.JWT_SECRET;
-
-// if (!JWT_SECRET) {
-//   throw new Error('JWT_SECRET is not set in environment variables');
-// }
-
-// export async function middleware(request: NextRequest) {
-//   // Exclude /api/register and /api/login from middleware
-//   if (request.nextUrl.pathname === '/api/register' || request.nextUrl.pathname === '/api/login') {
-//     return NextResponse.next()
-//   }
-
-//   const token = request.cookies.get('token')?.value
-
-//   if (!token) {
-//     return NextResponse.redirect(new URL('/login', request.url))
-//   }
-
-//   try {
-//     const secret = new TextEncoder().encode(JWT_SECRET);
-//     await jose.jwtVerify(token, secret);
-
-//     // Check if the requested page is the users page
-//     // if (request.nextUrl.pathname.startsWith('/users')) {
-//     //   const userRoles = payload.roles as string[] || [];
-//     //   if (!userRoles.includes('admin')) {
-//     //     return NextResponse.redirect(new URL('/unauthorized', request.url))
-//     //   }
-//     // }
-
-//     return NextResponse.next()
-//   } catch (error) {
-//     console.error('JWT verification error:', error);
-//     return NextResponse.redirect(new URL('/login', request.url))
-//   }
-// }
-
-// // The `/api/register` route is accessible without authentication.
-// // All other `/api/*` routes are protected.
-// // All `/menu/*` routes are protected.
-// // The `/users` route is protected and requires admin role.
-// // The login page remains accessible for unauthenticated users.
-
-// export const config = {
-//   matcher: ['/menu/:path*', '/api/:path*', '/users/:path*'],
-// }
-
-
-import { type NextRequest } from 'next/server'
-import { updateSession } from '@/utils/supabase/middleware'
+import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  // Create a response object that we can modify
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  // Create the Supabase client
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          // This is needed to set cookies for the current response
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          })
+        },
+        remove(name: string, options: any) {
+          // This is needed to remove cookies for the current response
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          })
+        },
+      },
+    }
+  )
+
+  // Refresh the session - this is crucial for auth to work properly
+  const { data: { session } } = await supabase.auth.getSession()
+
+  // Define public routes that don't require authentication
+  const publicRoutes = ['/login', '/register', '/auth', '/_next']
+  const isPublicRoute = publicRoutes.some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  )
+
+  // If no session and trying to access a protected route, redirect to login
+  if (!session && !isPublicRoute) {
+    // Create a new response for the redirect
+    const redirectUrl = new URL('/login', request.url)
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    
+    // Copy all cookies from the original response to the redirect response
+    response.cookies.getAll().forEach(cookie => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    
+    return redirectResponse
+  }
+
+  // Return the response with any modifications
+  return response
 }
 
+// Update the matcher to include all routes except static assets
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }

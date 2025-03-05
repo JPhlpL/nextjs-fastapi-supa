@@ -15,7 +15,7 @@ class UserService:
     # ====================== Database Call ==================================
     def add_new_user(self, user: UserSchema) -> UserSchema:
         try:
-            logger.info(f"Creating new user: {user.username}")
+            logger.info(f"Creating new user: {user.email}")
             db_user = self.user_repository.create_user(user)
             return db_user
         except Exception as e:
@@ -39,13 +39,13 @@ class UserService:
             logger.error(f"Error in UserService.get_user: {e}")
             raise Exception(f"Error in UserService.get_user: {e}")
     
-    def get_user_by_username(self, username: str) -> UserSchema:
+    def get_user_by_email(self, email: str) -> UserSchema:
         try:
-            logger.info(f"Getting user with username: {username}")
-            db_user = self.user_repository.get_user_by_username(username)
+            logger.info(f"Getting user with email: {email}")
+            db_user = self.user_repository.get_user_by_email(email)
             
             if not db_user:
-                logger.warning(f"User with username {username} not found")
+                logger.warning(f"User with email {email} not found")
                 raise HTTPException(status_code=404, detail="User not found")
             
             return db_user
@@ -53,8 +53,8 @@ class UserService:
             # If the repository raises an HTTPException, pass it along
             raise e
         except Exception as e:
-            logger.error(f"Error in UserService.get_user_by_username: {e}")
-            raise Exception(f"Error in UserService.get_user_by_username: {e}")
+            logger.error(f"Error in UserService.get_user_by_email: {e}")
+            raise Exception(f"Error in UserService.get_user_by_email: {e}")
         
     def get_all_users(self) -> list[UserSchema]:
         try:

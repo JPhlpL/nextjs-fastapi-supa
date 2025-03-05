@@ -1,19 +1,25 @@
 "use client";
 
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client'
 
 export default function TopNav() {
   const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false)
+  const supabase = createClient()
 
   const handleLogout = async () => {
-    const response = await fetch('/api/logout', {
-      method: 'POST',
-    });
-
-    if (response.ok) {
-      router.push('/login');
+    setLoggingOut(true)
+    try {
+      await supabase.auth.signOut()
+      router.push('/login')
+    } catch (error) {
+      console.error('Error signing out:', error)
+    } finally {
+      setLoggingOut(false)
     }
   };
 

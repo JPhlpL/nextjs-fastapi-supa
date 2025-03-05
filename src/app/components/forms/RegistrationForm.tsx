@@ -10,15 +10,16 @@ import { postData } from "@/utils/helpers";
 import { UserRegistration } from "@/types";
 import { Mail, UserIcon, Lock } from 'lucide-react';
 import Image from 'next/image';
-import { signup } from '@/app/login/action'
+import { signup } from '@/utils/action'
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState<UserRegistration>({
     email: "",
-    username: "",
     password: "",
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,28 +29,49 @@ export default function RegistrationForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
+    setIsLoading(true);
+
+    // Check if passwords match
+    if (formData.password !== confirmPassword) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
 
     try {
+      // First, try to sign up with Supabase
+      const formDataToSend = new FormData();
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('password', formData.password);
+      
+      // Call the signup function with the FormData object
+      const signupResult = await signup(formDataToSend);
+      
+      // Check if there was an error with Supabase signup
+      if (signupResult?.error) {
+        setError(signupResult.error);
+        setIsLoading(false);
+        return;
+      }
+      
+      // If Supabase signup was successful, proceed with your API call
       const response = await postData({
         url: process.env.NEXT_PUBLIC_API_URL + "/user/add",
         data: formData,
       });
 
       if (response) {
-         // Create a FormData object
-         const formDataToSend = new FormData();
-         formDataToSend.append('email', formData.email);
-         formDataToSend.append('password', formData.password);
- 
-         // Call the signup function with the FormData object
-         await signup(formDataToSend);
-         router.push('/login')
+        // Both Supabase and your API were successful
+        router.push('/login');
       } else {
-        setError(error || "An error occurred during registration");
+        // Your API failed but Supabase succeeded
+        setError("User was created in authentication system but failed to add to database. Please contact support.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
-      setError("An error occurred during registration. Please try again.");
+      setError(error?.message || "An error occurred during registration. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,7 +101,6 @@ export default function RegistrationForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-          {/* <form className="space-y-6"> */}
             <div className="relative">
               <Label htmlFor="email" className="sr-only">
                 Email
@@ -91,23 +112,6 @@ export default function RegistrationForm() {
                 type="email"
                 placeholder="Email"
                 value={formData.email}
-                onChange={handleChange}
-                required
-                className="pl-10 py-6 border-gray-300 focus:border-gray-500 focus:ring-gray-500"
-              />
-            </div>
-
-            <div className="relative">
-              <Label htmlFor="username" className="sr-only">
-                Username
-              </Label>
-              <UserIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-              <Input
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Username"
-                value={formData.username}
                 onChange={handleChange}
                 required
                 className="pl-10 py-6 border-gray-300 focus:border-gray-500 focus:ring-gray-500"
@@ -131,15 +135,33 @@ export default function RegistrationForm() {
               />
             </div>
 
+            <div className="relative">
+              <Label htmlFor="confirmPassword" className="sr-only">
+                Confirm Password
+              </Label>
+              <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="pl-10 py-6 border-gray-300 focus:border-gray-500 focus:ring-gray-500"
+              />
+            </div>
+
             {error && (
-              <p className="text-gray-500 text-sm text-center">{error}</p>
+              <p className="text-red-500 text-sm text-center">{error}</p>
             )}
 
             <Button
               type="submit"
               className="w-full bg-gray-600 hover:bg-gray-700 text-white py-6 rounded-full"
+              disabled={isLoading}
             >
-              REGISTER
+              {isLoading ? "REGISTERING..." : "REGISTER"}
             </Button>
 
             <div className="text-center">

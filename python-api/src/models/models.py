@@ -13,8 +13,6 @@ class User(Base):
 
     id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     email = Column(String(255), unique=True, nullable=False)
-    username = Column(String(255), unique=True, nullable=False)
-    password = Column(String(255), nullable=False)
     createdAt = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # Timezone-aware datetime
     updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

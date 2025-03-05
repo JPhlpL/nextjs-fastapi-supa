@@ -28,20 +28,20 @@ class UserRepository:
             raise Exception(f"Error in UserRepository.get_user: {e}")
         
     @with_db_session
-    def get_user_by_username(self, username: str, scoped_db: Session) -> User:
+    def get_user_by_email(self, email: str, scoped_db: Session) -> User:
         try:
-            logger.info(f"Fetching user with ID: {username}")
-            db_user = scoped_db.query(User).filter(User.username == str(username)).first()
+            logger.info(f"Fetching user with ID: {email}")
+            db_user = scoped_db.query(User).filter(User.email == str(email)).first()
 
             if not db_user:
               return None
           
-            logger.info(f"User with username: {username} found.")
+            logger.info(f"User with email: {email} found.")
             return db_user
         
         except Exception as e:
-            logger.error(f"Error getting user with Username {username}: {e}")
-            raise Exception(f"Error in UserRepository.get_user_by_username: {e}")
+            logger.error(f"Error getting user with email {email}: {e}")
+            raise Exception(f"Error in UserRepository.get_user_by_email: {e}")
         
     @with_db_session
     def get_all_users(self, scoped_db: Session) -> list[User]:
@@ -63,23 +63,15 @@ class UserRepository:
     @with_db_session
     def create_user(self, user: User, scoped_db: Session) -> User:
         try:
-            logger.info(f"Creating user: {user.username}")
-            
-            # Bcrypting Password
-            user_password = user.password
-            bytes = user_password.encode('utf-8') 
-            salt = bcrypt.gensalt() 
-            hash = bcrypt.hashpw(bytes, salt)
+            logger.info(f"Creating user: {user.email}")
             
             db_user = User(
-                email=user.email,
-                username=user.username,
-                password=hash
+                email=user.email
             )
             scoped_db.add(db_user)
             scoped_db.commit()
             scoped_db.refresh(db_user)
-            logger.info(f"User created successfully: {db_user.username}")
+            logger.info(f"User created successfully: {db_user.email}")
             return db_user
         except Exception as e:
             logger.error(f"Error creating user: {e}")
@@ -95,10 +87,6 @@ class UserRepository:
                 # Update fields except id and createdAt
                 if user.email:
                     db_user.email = user.email
-                if user.username:
-                    db_user.username = user.username
-                if user.password:
-                    db_user.password = user.password
                 db_user.updatedAt = datetime.now(timezone.utc)
 
                 scoped_db.commit()
