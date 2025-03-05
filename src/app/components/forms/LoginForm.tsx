@@ -6,14 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Lock } from 'lucide-react';
+import { User, Lock, Github } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
+// import { Separator } from "@/components/ui/separator";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGithubLoading, setIsGithubLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -45,6 +47,30 @@ export default function LoginForm() {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGitHubLogin = async () => {
+    setIsGithubLoading(true);
+    setError(null);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      
+      if (error) {
+        setError(error.message);
+      }
+      
+      // No need to redirect here as Supabase will handle the redirect to GitHub
+    } catch (err) {
+      console.error('GitHub login error:', err);
+      setError('An unexpected error occurred');
+      setIsGithubLoading(false);
     }
   };
 
@@ -127,6 +153,24 @@ export default function LoginForm() {
               disabled={isLoading}
             >
               {isLoading ? "LOGGING IN..." : "LOGIN"}
+            </Button>
+
+            {/* <div className="relative my-4">
+              <Separator />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="bg-white px-2 text-gray-500 text-sm">OR</span>
+              </div>
+            </div> */}
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleGitHubLogin}
+              disabled={isGithubLoading}
+            >
+              <Github className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
             </Button>
 
             <div className="text-center">

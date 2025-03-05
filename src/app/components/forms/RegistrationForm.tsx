@@ -8,9 +8,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { postData } from "@/utils/helpers";
 import { UserRegistration } from "@/types";
-import { Mail, UserIcon, Lock } from 'lucide-react';
+import { Mail, UserIcon, Lock, Github } from 'lucide-react';
 import Image from 'next/image';
 import { signup } from '@/utils/action'
+import { createClient } from '@/utils/supabase/client';
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState<UserRegistration>({
@@ -20,7 +21,9 @@ export default function RegistrationForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isGithubLoading, setIsGithubLoading] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -53,25 +56,37 @@ export default function RegistrationForm() {
         setIsLoading(false);
         return;
       }
+      router.push('/login');
       
-      // If Supabase signup was successful, proceed with your API call
-      const response = await postData({
-        url: process.env.NEXT_PUBLIC_API_URL + "/user/add",
-        data: formData,
-      });
-
-      if (response) {
-        // Both Supabase and your API were successful
-        router.push('/login');
-      } else {
-        // Your API failed but Supabase succeeded
-        setError("User was created in authentication system but failed to add to database. Please contact support.");
-      }
     } catch (error: any) {
       console.error("Registration error:", error);
       setError(error?.message || "An error occurred during registration. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGitHubSignup = async () => {
+    setIsGithubLoading(true);
+    setError("");
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      
+      if (error) {
+        setError(error.message);
+      }
+      
+      // No need to redirect here as Supabase will handle the redirect to GitHub
+    } catch (err) {
+      console.error('GitHub signup error:', err);
+      setError('An unexpected error occurred');
+      setIsGithubLoading(false);
     }
   };
 
@@ -162,6 +177,17 @@ export default function RegistrationForm() {
               disabled={isLoading}
             >
               {isLoading ? "REGISTERING..." : "REGISTER"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleGitHubSignup}
+              disabled={isGithubLoading}
+            >
+              <Github className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
             </Button>
 
             <div className="text-center">
