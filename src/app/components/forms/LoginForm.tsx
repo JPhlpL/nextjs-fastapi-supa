@@ -16,6 +16,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -69,6 +70,29 @@ export default function LoginForm() {
       // No need to redirect here as Supabase will handle the redirect to GitHub
     } catch (err) {
       console.error('GitHub login error:', err);
+      setError('An unexpected error occurred');
+      setIsGithubLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    setError(null);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      
+      if (error) {
+        setError(error.message);
+      }
+      
+    } catch (err) {
+      console.error('Google login error:', err);
       setError('An unexpected error occurred');
       setIsGithubLoading(false);
     }
@@ -173,6 +197,17 @@ export default function LoginForm() {
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
             </Button>
 
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleGoogleLogin}
+              disabled={isGoogleLoading}
+            >
+              <GoogleIcon className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
+            </Button>
+
             <div className="text-center">
               <span className="text-gray-600">Don`t have an account?</span>{" "}
               <Link
@@ -186,5 +221,30 @@ export default function LoginForm() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Google Icon Component
+function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="#fff" stroke="none" />
+      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" fill="none" stroke="#E0E0E0" />
+      <path d="M9 12v-1h6v1h-6z" fill="#EA4335" stroke="none" />
+      <path d="M9 12v1h6v-1h-6z" fill="#FBBC05" stroke="none" />
+      <path d="M9 12v-1h3v2h-3v-1z" fill="#34A853" stroke="none" />
+      <path d="M12 12v-1h3v1h-3z" fill="#4285F4" stroke="none" />
+    </svg>
   );
 }
