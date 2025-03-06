@@ -35,7 +35,7 @@ export default function LoginForm() {
       }
 
       // Successful login - navigate to account page
-      router.push('/account');
+      router.push('/home');
     } catch (err) {
       console.error('Login error:', err);
       setError('An unexpected error occurred');
