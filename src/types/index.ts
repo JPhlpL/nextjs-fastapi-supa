@@ -16,6 +16,8 @@ export interface ApiError {
   export interface UserRegistration {
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
   }
 
   export interface Role {

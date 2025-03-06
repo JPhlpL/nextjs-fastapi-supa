@@ -8,6 +8,7 @@ const pathToTitle: { [key: string]: string } = {
   "/": "Home",
   "/home": "Home",
   "/users": "Users",
+  "/roles": "User Roles",
   "/about": "About",
 };
 
