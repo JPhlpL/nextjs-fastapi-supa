@@ -1,10 +1,8 @@
 from sqlalchemy.orm import Session
 from src.models.models import User
 from src.wrappers.dbSessionWrapper import with_db_session
-from sqlalchemy import select
 from src.utils.logger import setup_logger
 from uuid import UUID
-import bcrypt
 from datetime import datetime, timezone
 logger = setup_logger()
 
@@ -66,7 +64,8 @@ class UserRepository:
             logger.info(f"Creating user: {user.email}")
             
             db_user = User(
-                email=user.email
+                email=user.email,
+                name=user.name
             )
             scoped_db.add(db_user)
             scoped_db.commit()
@@ -87,6 +86,8 @@ class UserRepository:
                 # Update fields except id and createdAt
                 if user.email:
                     db_user.email = user.email
+                if user.name:
+                    db_user.name = user.name
                 db_user.updatedAt = datetime.now(timezone.utc)
 
                 scoped_db.commit()

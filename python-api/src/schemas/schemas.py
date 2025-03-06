@@ -5,12 +5,14 @@ from uuid import UUID
 class User(BaseModel):
     id: Optional[UUID] = None
     email: str
+    name: str
     createdAt: Optional[datetime] = None
     updatedAt: Optional[datetime] = None
     class Config:
         from_attributes = True
     
 class UserLite(BaseModel):
+    name: str
     email: str
     class Config:
         from_attributes = True

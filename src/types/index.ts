@@ -4,12 +4,14 @@ export interface ApiError {
   }
   export interface User {
     id: string;
+    name: string;
     email: string;
     createdAt: string;
     updatedAt: string; // Ensure this is spelled correctly
   }
 
   export interface UserLite {
+    name: string;
     email: string;
   }
 

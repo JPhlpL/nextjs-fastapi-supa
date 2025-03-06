@@ -24,7 +24,7 @@ pip freeze > requirements.txt
 - KANBAN -
 
 **TO-DO:**
-1. Integrate the registration from the nextjs using fetchapi to fastaapi
+1. Integrate the registration from the nextjs using fetchapi to fastapi
 2. Create User Role Management
 
 DONE:
