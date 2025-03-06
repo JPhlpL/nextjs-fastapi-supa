@@ -17,7 +17,7 @@ class User(Base):
     updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
 class Role(Base):
-    __tablename__ = 'roles'
+    __tablename__ = 'user_roles'
 
     id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     title = Column(String(100), unique=False, nullable=False)
