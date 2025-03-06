@@ -6,14 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { postData } from "@/utils/helpers";
 import { UserRegistration } from "@/types";
-import { Mail, UserIcon, Lock, Github } from 'lucide-react';
-import Image from 'next/image';
+import { Mail, Lock } from 'lucide-react';
 import { signup } from '@/utils/action'
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from "react-icons/fc";
-import { createClient } from '@/utils/supabase/client';
+import { useAuth } from "@/contexts/auth-context";
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState<UserRegistration>({
@@ -26,7 +24,7 @@ export default function RegistrationForm() {
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
+  const { signIn, signInWithOAuth } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -74,45 +72,26 @@ export default function RegistrationForm() {
     setError("");
     
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      
-      if (error) {
-        setError(error.message);
-      }
-      
-      // No need to redirect here as Supabase will handle the redirect to GitHub
+      await signInWithOAuth('github');
     } catch (err) {
-      console.error('GitHub signup error:', err);
+      console.error('GitHub login error:', err);
       setError('An unexpected error occurred');
+    } finally {
       setIsGithubLoading(false);
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignup = async () => {
     setIsGoogleLoading(true);
     setError("");
     
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      
-      if (error) {
-        setError(error.message);
-      }
-      
+      await signInWithOAuth('google');
     } catch (err) {
       console.error('Google login error:', err);
       setError('An unexpected error occurred');
-      setIsGithubLoading(false);
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -220,7 +199,7 @@ export default function RegistrationForm() {
               type="button"
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
-              onClick={handleGoogleLogin}
+              onClick={handleGoogleSignup}
               disabled={isGoogleLoading || isGithubLoading || isLoading}
             >
               <FcGoogle size={24} className="h-5 w-5" />

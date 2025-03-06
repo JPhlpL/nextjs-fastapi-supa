@@ -6,12 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Lock, Github } from 'lucide-react';
-import { FaReact } from 'react-icons/fa';
+import { User, Lock } from 'lucide-react';
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from "react-icons/fc";
-import { createClient } from '@/utils/supabase/client';
-// import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -21,7 +19,7 @@ export default function LoginForm() {
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
+  const { signIn, signInWithOAuth } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,23 +27,15 @@ export default function LoginForm() {
     setError(null);
 
     try {
-      // Use the Supabase client directly for login
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await signIn(email, password);
 
       if (error) {
         setError(error.message);
         return;
       }
 
-      if (data.session) {
-        // Successful login - navigate to account page
-        router.push('/home');
-        // Force a refresh of the current page data
-        router.refresh();
-      }
+      // Successful login - navigate to account page
+      router.push('/account');
     } catch (err) {
       console.error('Login error:', err);
       setError('An unexpected error occurred');
@@ -59,21 +49,11 @@ export default function LoginForm() {
     setError(null);
     
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      
-      if (error) {
-        setError(error.message);
-      }
-      
-      // No need to redirect here as Supabase will handle the redirect to GitHub
+      await signInWithOAuth('github');
     } catch (err) {
       console.error('GitHub login error:', err);
       setError('An unexpected error occurred');
+    } finally {
       setIsGithubLoading(false);
     }
   };
@@ -83,21 +63,12 @@ export default function LoginForm() {
     setError(null);
     
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      
-      if (error) {
-        setError(error.message);
-      }
-      
+      await signInWithOAuth('google');
     } catch (err) {
       console.error('Google login error:', err);
       setError('An unexpected error occurred');
-      setIsGithubLoading(false);
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
