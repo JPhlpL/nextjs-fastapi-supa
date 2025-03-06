@@ -45,3 +45,4 @@ __pycache__/
 *.log 
 # All .log file will be ignore
 .env.example
+nextjs-fastapi-supa.code-workspace
