@@ -9,6 +9,10 @@ import Link from "next/link";
 import { User, Lock } from 'lucide-react';
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from "react-icons/fc";
+import { FaSquareFacebook } from "react-icons/fa6";
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaLinkedin } from "react-icons/fa";
+import { FaMicrosoft } from "react-icons/fa";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function LoginForm() {
@@ -18,6 +22,10 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFBLoading, setIsFBLoading] = useState(false);
+  const [isTwitterLoading, setIsTwitterLoading] = useState(false);
+  const [isLinkedinLoading, setIsLinkedinLoading] = useState(false);
+  const [isAzureLoading, setIsAzureLoading] = useState(false);
   const router = useRouter();
   const { signIn, signInWithOAuth } = useAuth();
 
@@ -71,6 +79,63 @@ export default function LoginForm() {
       setIsGoogleLoading(false);
     }
   };
+
+  const handleFBLogin = async () => {
+    setIsFBLoading(true);
+    setError(null);
+    
+    try {
+      await signInWithOAuth('facebook');
+    } catch (err) {
+      console.error('Facebook login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsFBLoading(false);
+    }
+  };
+
+  const handleTwitterLogin = async () => {
+    setIsTwitterLoading(true);
+    setError(null);
+    
+    try {
+      await signInWithOAuth('twitter');
+    } catch (err) {
+      console.error('Twitter login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsTwitterLoading(false);
+    }
+  };
+
+  const handleLinkedinLogin = async () => {
+    setIsLinkedinLoading(true);
+    setError(null);
+    
+    try {
+      await signInWithOAuth('linkedin_oidc');
+    } catch (err) {
+      console.error('Linkedin login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsLinkedinLoading(false);
+    }
+  };
+
+  const handleAzureLogin = async () => {
+    setIsAzureLoading(true);
+    setError(null);
+    
+    try {
+      await signInWithOAuth('azure');
+    } catch (err) {
+      console.error('Microsoft login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsAzureLoading(false);
+    }
+  };
+
 
   return (
     <div className="flex w-full min-h-screen">
@@ -148,7 +213,7 @@ export default function LoginForm() {
             <Button
               type="submit"
               className="w-full bg-gray-700 hover:bg-gray-700 text-white py-6 rounded-full"
-              disabled={isLoading || isGithubLoading || isGoogleLoading}
+              disabled={isLoading || isGithubLoading || isFBLoading || isAzureLoading || isGoogleLoading}
             >
               {isLoading ? "LOGGING IN..." : "LOGIN"}
             </Button>
@@ -165,7 +230,7 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGitHubLogin}
-              disabled={isGithubLoading || isGoogleLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isAzureLoading || isLoading}
             >
               <AiFillGithub size={24} className="h-5 w-5" />
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
@@ -176,10 +241,54 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGoogleLogin}
-              disabled={isGithubLoading || isGoogleLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isAzureLoading || isLoading}
             >
               <FcGoogle size={24} className="h-5 w-5" />
-              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
+              {isGoogleLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleFBLogin}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isAzureLoading || isLoading}
+            >
+              <FaSquareFacebook size={24} className="h-5 w-5" />
+              {isFBLoading ? "CONNECTING..." : "CONTINUE WITH FACEBOOK"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleTwitterLogin}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isAzureLoading || isLoading}
+            >
+              <FaSquareXTwitter size={24} className="h-5 w-5" />
+              {isTwitterLoading ? "CONNECTING..." : "CONTINUE WITH TWITTER"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleLinkedinLogin}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading || isLoading}
+            >
+              <FaLinkedin size={24} className="h-5 w-5" />
+              {isLinkedinLoading ? "CONNECTING..." : "CONTINUE WITH LINKEDIN"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleAzureLogin}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading  || isLoading}
+            >
+              <FaMicrosoft size={24} className="h-5 w-5" />
+              {isAzureLoading ? "CONNECTING..." : "CONTINUE WITH MICROSOFT"}
             </Button>
 
             <div className="text-center">
