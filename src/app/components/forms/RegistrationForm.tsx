@@ -12,6 +12,7 @@ import { Mail, Lock, UserIcon } from "lucide-react"
 import { signup } from "@/utils/action"
 import { AiFillGithub } from "react-icons/ai"
 import { FcGoogle } from "react-icons/fc"
+import { FaSquareFacebook } from "react-icons/fa6";
 import { useAuth } from "@/contexts/auth-context"
 
 export default function RegistrationForm() {
@@ -26,6 +27,7 @@ export default function RegistrationForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [isGithubLoading, setIsGithubLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
+  const [isFBLoading, setIsFBLoading] = useState(false);
   const router = useRouter()
   const { signIn, signInWithOAuth } = useAuth()
 
@@ -99,6 +101,20 @@ export default function RegistrationForm() {
       setIsGoogleLoading(false)
     }
   }
+
+  const handleFBSignup = async () => {
+    setIsFBLoading(true);
+    setError("");
+    
+    try {
+      await signInWithOAuth('facebook');
+    } catch (err) {
+      console.error('Facebook login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsFBLoading(false);
+    }
+  };
 
   return (
     <div className="flex w-full min-h-screen">
@@ -213,7 +229,7 @@ export default function RegistrationForm() {
             <Button
               type="submit"
               className="w-full bg-gray-600 hover:bg-gray-700 text-white py-6 rounded-full"
-              disabled={isLoading || isGithubLoading || isGoogleLoading}
+              disabled={isLoading || isGithubLoading || isFBLoading || isGoogleLoading}
             >
               {isLoading ? "REGISTERING..." : "REGISTER"}
             </Button>
@@ -223,7 +239,7 @@ export default function RegistrationForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGitHubSignup}
-              disabled={isGithubLoading || isGoogleLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isLoading}
             >
               <AiFillGithub size={24} className="h-5 w-5" />
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
@@ -234,10 +250,21 @@ export default function RegistrationForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGoogleSignup}
-              disabled={isGoogleLoading || isGithubLoading || isLoading}
+              disabled={isGoogleLoading || isGithubLoading || isFBLoading || isLoading}
             >
               <FcGoogle size={24} className="h-5 w-5" />
               {isGoogleLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleFBSignup}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isLoading}
+            >
+              <FaSquareFacebook size={24} className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH FACEBOOK"}
             </Button>
 
             <div className="text-center">
