@@ -25,24 +25,28 @@ ALTER COLUMN "createdAt" SET DEFAULT now() AT TIME ZONE 'UTC',
 ALTER COLUMN "updatedAt" SET DEFAULT now() AT TIME ZONE 'UTC';
 
 -- Added function for auth.users will automatically added on the public.users
-DROP FUNCTION IF EXISTS auth.on_auth_user_created_insert_row_in_profiles cascade;  
-create function auth.on_auth_user_created_insert_row_in_profiles()
-returns trigger as $$
- BEGIN
-   INSERT INTO public.users(id, email)
-   VALUES (NEW.id, NEW.email);
+DROP FUNCTION IF EXISTS auth.on_auth_user_created_insert_row_in_profiles CASCADE;  
 
+CREATE FUNCTION auth.on_auth_user_created_insert_row_in_profiles()
+RETURNS TRIGGER AS $$
+BEGIN
+   -- Insert into public.users
+   INSERT INTO public.users(id, email, name)
+   VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'full_name');  -- Accessing the full_name from metadata
+
+   -- Insert into public.user_roles
    INSERT INTO public.user_roles(user_id, title)
    VALUES (NEW.id, 'member');
 
    RETURN NEW;
- END;
-$$ language plpgsql security definer;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure auth.on_auth_user_created_insert_row_in_profiles();
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE PROCEDURE auth.on_auth_user_created_insert_row_in_profiles();
 
 
   -- TODO: CREATE INDEXES ALSO IS A MUST!
