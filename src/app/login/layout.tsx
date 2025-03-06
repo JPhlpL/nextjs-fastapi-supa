@@ -6,7 +6,7 @@ import React from 'react'; // Import React
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Benefits Portal | Login',
+  title: 'Template | Login',
   description: 'Login to access your benefits portal',
 }
 

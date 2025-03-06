@@ -8,7 +8,7 @@ import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Perks | About",
+  title: "Template | About",
   description: "Created with Next.js, Tailwind CSS, and shadcn/ui",
 };
 
