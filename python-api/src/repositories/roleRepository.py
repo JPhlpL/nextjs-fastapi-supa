@@ -4,7 +4,6 @@ from src.wrappers.dbSessionWrapper import with_db_session
 from sqlalchemy import select
 from src.utils.logger import setup_logger
 from uuid import UUID
-import bcrypt
 from datetime import datetime, timezone
 logger = setup_logger()
 
