@@ -53,12 +53,6 @@ export function EditUserModal({ isOpen, onClose, user, onSave }: EditUserModalPr
               <Input id="id" name="id" value={editedUser .id} onChange={handleInputChange} className="col-span-3" disabled />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input id="username" name="username" value={editedUser .username} onChange={handleInputChange} className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email" className="text-right">
                 Email
               </Label>

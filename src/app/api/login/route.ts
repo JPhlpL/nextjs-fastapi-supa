@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   const { username } = await request.json()
 
   const user = await db.select().from(users)
-               .where(or(eq(users.username, username), eq(users.email, username)))
+               .where(or(eq(users.email, username)))
                .limit(1);
 
   if (user.length === 0) {
@@ -25,8 +25,7 @@ export async function POST(request: Request) {
   const secret = new TextEncoder().encode(JWT_SECRET)
   const token = await new jose.SignJWT({ 
     id: user[0].id, 
-    email: user[0].email,
-    username: user[0].username
+    email: user[0].email
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('1h')
@@ -36,8 +35,7 @@ export async function POST(request: Request) {
     message: 'Login successful',
     user: {
       id: user[0].id,
-      email: user[0].email,
-      username: user[0].username
+      email: user[0].email
     }
   }, { status: 200 })
   

@@ -8,15 +8,8 @@ const pathToTitle: { [key: string]: string } = {
   "/": "Home",
   "/home": "Home",
   "/users": "Users",
-  "/roles": "Roles",
-  "/retirement": "Retirement Computation",
-  "/overtime": "Overtime Computation",
-  "/contact": "Contact",
-  "/manual": "Manual",
-  "/calendar": "Calendar",
-  "/support": "Ask Support",
+  "/roles": "User Roles",
   "/about": "About",
-  "/admin": "Admin",
 };
 
 export default function PageHeader() {

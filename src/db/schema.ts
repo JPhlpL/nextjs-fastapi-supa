@@ -3,9 +3,8 @@ import { pgTable, varchar, char, timestamp } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: char('id', { length: 36 }).primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 100 }).notNull().unique(),
-  username: varchar('username', { length: 100 }).notNull().unique(),
-  password: varchar('password', { length: 255 }).notNull(),
   createdAt: timestamp('createdAt'), // Use timestamp for datetime
   updatedAt: timestamp('updatedAt')  // Use timestamp for datetime
 });
@@ -17,3 +16,7 @@ export const roles = pgTable('roles', {
   createdAt: timestamp('createdAt').notNull(), // Use timestamp for datetime
   updatedAt: timestamp('updatedAt').notNull()  // Use timestamp for datetime
 });
+
+// everytime we have changes on schema and it changes directly to the sql
+//npx drizzle-kit generate
+//npx drizzle-kit push

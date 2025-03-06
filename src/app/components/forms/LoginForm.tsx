@@ -7,38 +7,68 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Lock } from 'lucide-react';
-import Image from 'next/image';
-import { login } from '@/app/login/action'
-
+import { AiFillGithub } from 'react-icons/ai';
+import { FcGoogle } from "react-icons/fc";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function LoginForm() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
+  const { signIn, signInWithOAuth } = useAuth();
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setError("");
-
-    
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
-      });
+      const { error } = await signIn(email, password);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        router.push("/home");
-      } else {
-        setError(data.error || "An error occurred during login");
+      if (error) {
+        setError(error.message);
+        return;
       }
-    } catch (error) {
-      console.error("JWT verification error:", error);
+
+      // Successful login - navigate to account page
+      router.push('/home');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGitHubLogin = async () => {
+    setIsGithubLoading(true);
+    setError(null);
+    
+    try {
+      await signInWithOAuth('github');
+    } catch (err) {
+      console.error('GitHub login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsGithubLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    setError(null);
+    
+    try {
+      await signInWithOAuth('google');
+    } catch (err) {
+      console.error('Google login error:', err);
+      setError('An unexpected error occurred');
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -64,15 +94,13 @@ export default function LoginForm() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md space-y-8">
           <div className="flex flex-col items-center gap-4">
-            
             <h2 className="text-3xl font-bold text-gray-600">LOGIN</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-          {/* <form className="space-y-6"> */}
             <div className="relative">
-              <Label htmlFor="username" className="sr-only">
-                Username
+              <Label htmlFor="email" className="sr-only">
+                Email
               </Label>
               <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
@@ -80,8 +108,8 @@ export default function LoginForm() {
                 name="email"
                 type="text"
                 placeholder="Username or Email"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="pl-10 py-6 border-gray-300 focus:border-gray-500 focus:ring-gray-500"
               />
@@ -105,7 +133,7 @@ export default function LoginForm() {
             </div>
 
             {error && (
-              <p className="text-gray-500 text-sm text-center">{error}</p>
+              <p className="text-red-500 text-sm text-center">{error}</p>
             )}
 
             <div className="flex items-center justify-end">
@@ -120,9 +148,38 @@ export default function LoginForm() {
             <Button
               type="submit"
               className="w-full bg-gray-700 hover:bg-gray-700 text-white py-6 rounded-full"
-              formAction={login}
+              disabled={isLoading || isGithubLoading || isGoogleLoading}
             >
-              LOGIN
+              {isLoading ? "LOGGING IN..." : "LOGIN"}
+            </Button>
+
+            {/* <div className="relative my-4">
+              <Separator />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="bg-white px-2 text-gray-500 text-sm">OR</span>
+              </div>
+            </div> */}
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleGitHubLogin}
+              disabled={isGithubLoading || isGoogleLoading || isLoading}
+            >
+              <AiFillGithub size={24} className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleGoogleLogin}
+              disabled={isGithubLoading || isGoogleLoading || isLoading}
+            >
+              <FcGoogle size={24} className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
             </Button>
 
             <div className="text-center">
