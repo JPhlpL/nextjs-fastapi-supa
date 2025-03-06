@@ -11,6 +11,8 @@ import { UserRegistration } from "@/types";
 import { Mail, UserIcon, Lock, Github } from 'lucide-react';
 import Image from 'next/image';
 import { signup } from '@/utils/action'
+import { AiFillGithub } from 'react-icons/ai';
+import { FcGoogle } from "react-icons/fc";
 import { createClient } from '@/utils/supabase/client';
 
 export default function RegistrationForm() {
@@ -22,6 +24,7 @@ export default function RegistrationForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -85,6 +88,29 @@ export default function RegistrationForm() {
       // No need to redirect here as Supabase will handle the redirect to GitHub
     } catch (err) {
       console.error('GitHub signup error:', err);
+      setError('An unexpected error occurred');
+      setIsGithubLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    setError("");
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      
+      if (error) {
+        setError(error.message);
+      }
+      
+    } catch (err) {
+      console.error('Google login error:', err);
       setError('An unexpected error occurred');
       setIsGithubLoading(false);
     }
@@ -174,7 +200,7 @@ export default function RegistrationForm() {
             <Button
               type="submit"
               className="w-full bg-gray-600 hover:bg-gray-700 text-white py-6 rounded-full"
-              disabled={isLoading}
+              disabled={isLoading || isGithubLoading || isGoogleLoading}
             >
               {isLoading ? "REGISTERING..." : "REGISTER"}
             </Button>
@@ -184,10 +210,21 @@ export default function RegistrationForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGitHubSignup}
-              disabled={isGithubLoading}
+              disabled={isGithubLoading || isGoogleLoading || isLoading}
             >
-              <Github className="h-5 w-5" />
+              <AiFillGithub size={24} className="h-5 w-5" />
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full py-6 rounded-full flex items-center justify-center gap-2"
+              onClick={handleGoogleLogin}
+              disabled={isGoogleLoading || isGithubLoading || isLoading}
+            >
+              <FcGoogle size={24} className="h-5 w-5" />
+              {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
             </Button>
 
             <div className="text-center">

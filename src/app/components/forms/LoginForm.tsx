@@ -7,6 +7,9 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Lock, Github } from 'lucide-react';
+import { FaReact } from 'react-icons/fa';
+import { AiFillGithub } from 'react-icons/ai';
+import { FcGoogle } from "react-icons/fc";
 import { createClient } from '@/utils/supabase/client';
 // import { Separator } from "@/components/ui/separator";
 
@@ -174,7 +177,7 @@ export default function LoginForm() {
             <Button
               type="submit"
               className="w-full bg-gray-700 hover:bg-gray-700 text-white py-6 rounded-full"
-              disabled={isLoading}
+              disabled={isLoading || isGithubLoading || isGoogleLoading}
             >
               {isLoading ? "LOGGING IN..." : "LOGIN"}
             </Button>
@@ -191,9 +194,9 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGitHubLogin}
-              disabled={isGithubLoading}
+              disabled={isGithubLoading || isGoogleLoading || isLoading}
             >
-              <Github className="h-5 w-5" />
+              <AiFillGithub size={24} className="h-5 w-5" />
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
             </Button>
 
@@ -202,9 +205,9 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGoogleLogin}
-              disabled={isGoogleLoading}
+              disabled={isGithubLoading || isGoogleLoading || isLoading}
             >
-              <GoogleIcon className="h-5 w-5" />
+              <FcGoogle size={24} className="h-5 w-5" />
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
             </Button>
 
@@ -221,30 +224,5 @@ export default function LoginForm() {
         </div>
       </div>
     </div>
-  );
-}
-
-// Google Icon Component
-function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width="24"
-      height="24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="#fff" stroke="none" />
-      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" fill="none" stroke="#E0E0E0" />
-      <path d="M9 12v-1h6v1h-6z" fill="#EA4335" stroke="none" />
-      <path d="M9 12v1h6v-1h-6z" fill="#FBBC05" stroke="none" />
-      <path d="M9 12v-1h3v2h-3v-1z" fill="#34A853" stroke="none" />
-      <path d="M12 12v-1h3v1h-3z" fill="#4285F4" stroke="none" />
-    </svg>
   );
 }
