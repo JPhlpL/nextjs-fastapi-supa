@@ -213,7 +213,7 @@ export default function LoginForm() {
             <Button
               type="submit"
               className="w-full bg-gray-700 hover:bg-gray-700 text-white py-6 rounded-full"
-              disabled={isLoading || isGithubLoading || isFBLoading || isAzureLoading || isGoogleLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading || isLoading}
             >
               {isLoading ? "LOGGING IN..." : "LOGIN"}
             </Button>
@@ -230,7 +230,7 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGitHubLogin}
-              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isAzureLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading || isLoading}
             >
               <AiFillGithub size={24} className="h-5 w-5" />
               {isGithubLoading ? "CONNECTING..." : "CONTINUE WITH GITHUB"}
@@ -241,7 +241,7 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleGoogleLogin}
-              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isAzureLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading || isLoading}
             >
               <FcGoogle size={24} className="h-5 w-5" />
               {isGoogleLoading ? "CONNECTING..." : "CONTINUE WITH GOOGLE"}
@@ -252,7 +252,7 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleFBLogin}
-              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isAzureLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading || isLoading}
             >
               <FaSquareFacebook size={24} className="h-5 w-5" />
               {isFBLoading ? "CONNECTING..." : "CONTINUE WITH FACEBOOK"}
@@ -263,7 +263,7 @@ export default function LoginForm() {
               variant="outline"
               className="w-full py-6 rounded-full flex items-center justify-center gap-2"
               onClick={handleTwitterLogin}
-              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isAzureLoading || isLoading}
+              disabled={isGithubLoading || isGoogleLoading || isFBLoading || isTwitterLoading || isLinkedinLoading || isAzureLoading || isLoading}
             >
               <FaSquareXTwitter size={24} className="h-5 w-5" />
               {isTwitterLoading ? "CONNECTING..." : "CONTINUE WITH TWITTER"}
