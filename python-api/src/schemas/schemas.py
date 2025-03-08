@@ -6,6 +6,7 @@ class User(BaseModel):
     id: Optional[UUID] = None
     email: str
     name: str
+    status: str
     createdAt: Optional[datetime] = None
     updatedAt: Optional[datetime] = None
     class Config:

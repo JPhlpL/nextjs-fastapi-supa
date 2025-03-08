@@ -88,6 +88,20 @@ export default function UsersPage() {
       },
     },
     {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+    },
+    {
       accessorKey: "createdAt",
       header: ({ column }) => {
         return (

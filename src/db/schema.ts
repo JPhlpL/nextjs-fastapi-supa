@@ -4,12 +4,13 @@ import { pgTable, varchar, char, timestamp } from 'drizzle-orm/pg-core';
 export const users = pgTable('users', {
   id: char('id', { length: 36 }).primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
+  status: varchar('status', { length: 10 }).notNull(),
   email: varchar('email', { length: 100 }).notNull().unique(),
   createdAt: timestamp('createdAt'), // Use timestamp for datetime
   updatedAt: timestamp('updatedAt')  // Use timestamp for datetime
 });
 
-export const roles = pgTable('roles', {
+export const user_roles = pgTable('user_roles', {
   id: char('id', { length: 36 }).primaryKey(),
   title: varchar('title', { length: 100 }),
   user_id: varchar('user_id', { length: 100 }),
