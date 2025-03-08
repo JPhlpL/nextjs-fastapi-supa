@@ -67,10 +67,10 @@ class UserService:
         except HTTPException as e:
             raise e
 
-    def update_user(self, user_id: UUID, user: UserSchema) -> UserSchema:
+    def update_user(self, user_id: UUID, updated_data: dict[str, any]) -> User:
         try:
             logger.info(f"Updating user with user_id: {user_id}")
-            db_user = self.user_repository.update_user(user_id, user)
+            db_user = self.user_repository.update_user(user_id, updated_data)
             return db_user
         except Exception as e:
             logger.error(f"Error in UserService.update_user: {e}")
@@ -84,6 +84,7 @@ class UserService:
         except Exception as e:
             logger.error(f"Error in UserService.update_user: {e}")
             raise Exception(f"Error in UserService.update_user: {e}")
+        
     # ====================== Database Call ==================================
     
     # ====================== Schema Transform ==================================

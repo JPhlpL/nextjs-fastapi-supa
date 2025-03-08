@@ -1,0 +1,2 @@
+ALTER TABLE public.users
+ADD COLUMN role varchar(10) DEFAULT 'MEMBER' NOT NULL;

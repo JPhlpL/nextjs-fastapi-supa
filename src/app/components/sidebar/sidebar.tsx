@@ -1,38 +1,39 @@
 "use client"
 
-import { Home, Contact, Book, Calendar, PhoneCall, InfoIcon, User, FileSliders, Calculator, BookUser } from 'lucide-react';
+import { Home, InfoIcon, User2 } from 'lucide-react';
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth';
 import { getData } from "@/utils/helpers";
-import { Role } from "@/types/index"
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { User } from "@/types/index"
+
+// Define a type for your User if not already defined
 
 export default function Sidebar() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const { user } = useAuth()
-  const user_id = user?.id
+  const { user } = useAuth();
+  const user_id = user?.id;
   const pathname = usePathname();
 
-  const fetchCurrentRole = useCallback(async () => {
+  const fetchCurrentUser = useCallback(async () => {
     if (!user_id) return;
 
     try {
-      const response = await getData<Role[]>({
-        url: `${process.env.NEXT_PUBLIC_API_URL}/role/get-roles-by-user/${user_id}`,
+      const response = await getData<User>({
+        url: `${process.env.NEXT_PUBLIC_API_URL}/user/get/${user_id}`,
       });
-
-      const adminRole = response.some(role => role.title.toLowerCase() === 'admin');
-      setIsAdmin(adminRole);
+      // Check if the user's role is 'admin' (case insensitive)
+      setIsAdmin(response.role.toLowerCase() === 'admin');
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      console.error("Error fetching user:", error);
     }
   }, [user_id]);
 
   useEffect(() => {
-    fetchCurrentRole();
-  }, [fetchCurrentRole]);
+    fetchCurrentUser();
+  }, [fetchCurrentUser]);
 
   const NavLink = ({ href, icon: Icon, children }: { href: string; icon: React.ElementType; children: React.ReactNode }) => {
     const isActive = pathname === href;
@@ -55,12 +56,9 @@ export default function Sidebar() {
       <nav>
         <NavLink href="/home" icon={Home}>Home</NavLink>
         <NavLink href="/about" icon={InfoIcon}>About</NavLink>
-        {isAdmin && 
-          <>
-            <NavLink href="/users" icon={User}>Users</NavLink>
-            <NavLink href="/roles" icon={BookUser}>Roles</NavLink>
-          </>
-        }
+        {isAdmin && (
+          <NavLink href="/users" icon={User2}>Users</NavLink>
+        )}
       </nav>
     </div>
   );

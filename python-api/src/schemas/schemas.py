@@ -2,28 +2,22 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
+    
 class User(BaseModel):
     id: Optional[UUID] = None
-    email: str
-    name: str
-    status: str
+    email: Optional[str] = None
+    name: Optional[str] = None
+    status: Optional[str] = None
+    role: Optional[str] = None
     createdAt: Optional[datetime] = None
     updatedAt: Optional[datetime] = None
-    class Config:
-        from_attributes = True
     
-class UserLite(BaseModel):
-    name: str
-    email: str
     class Config:
         from_attributes = True
 
-class Role(BaseModel):
-    id: Optional[UUID] = None
-    title: str
-    user_id: UUID
-    createdAt: Optional[datetime] = None
-    updatedAt: Optional[datetime] = None
+class UserLite(BaseModel):
+    name: str
+    email: str
     class Config:
         from_attributes = True
 class UserInfo(BaseModel):
@@ -31,6 +25,8 @@ class UserInfo(BaseModel):
     user_info: UserLite
     class Config:
         from_attributes = True
+        
+        
 
 # class Permission(BaseModel):
 #     id: UUID

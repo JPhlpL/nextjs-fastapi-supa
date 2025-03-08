@@ -4,37 +4,28 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timezone
 import uuid
 from src.database.config import get_database_engine  # Import the function to get the engine
+from sqlalchemy.orm import (
+    Mapped,
+    relationship
+)
 
 # Initialize the base class for models
 Base = declarative_base()
 
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 class User(Base):
     __tablename__ = 'users'
-
-    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    email = Column(String(255), unique=True, nullable=False)
-    name = Column(String(255), nullable=False)
-    status = Column(String(10), nullable=False)
-    createdAt = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # Timezone-aware datetime
-    updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-
-class Role(Base):
-    __tablename__ = 'user_roles'
-
-    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    title = Column(String(100), unique=False, nullable=False)
-    user_id = Column(CHAR(36), ForeignKey('users.id'), nullable=False) 
-    createdAt = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-
-# class Permission(Base):
-#     __tablename__ = 'permissions'
-
-#     id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-#     description = Column(String(100), unique=True, nullable=False)
-#     createdAt = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # Timezone-aware datetime
-#     updatedAt = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-# Create tables in the database
+    
+    id: Mapped[str] = mapped_column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    status: Mapped[str] = mapped_column(String(10), nullable=False)
+    createdAt: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updatedAt: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc)
+    )
+    role: Mapped[str] = mapped_column(String(10), nullable=False)
 
 engine = get_database_engine()  # Call the function to get the engine
 Base.metadata.create_all(bind=engine)

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 from src.services.userService import UserService
 from src.schemas.schemas import (
@@ -34,13 +34,18 @@ async def add_user_endpoint(user: UserSchema):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.put("/update/{user_id}", response_model=UserSchema)
-async def update_user_endpoint(user_id: UUID, user: UserSchema):
-    logger.info(f"Received request to create user: {user.email}")
+async def update_user_endpoint(
+    request: Request,
+    user_id: UUID
+):
+    
+    data = await request.json()
     user_service = UserService()
     try:
-        db_user = user_service.update_user(user_id, user)
+        db_user = user_service.update_user(user_id, data)
         logger.info(f"User updated successfully: {db_user.email}")
         return db_user
+    
     except Exception as e:
         logger.error(f"Error creating user: {e}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -49,24 +54,6 @@ async def update_user_endpoint(user_id: UUID, user: UserSchema):
 async def get_user_endpoint(user_id: UUID, user_service: UserService = Depends()):
     try:
         return user_service.get_user(user_id)
-    except HTTPException as e:
-        raise e
-    
-@router.get("/get-user-info/{user_id}", response_model=UserInfoSchema)
-async def get_user_info_endpoint(
-    user_id: UUID, 
-    user_service: UserService = Depends()
-):
-    try:
-        user =  user_service.get_user(user_id)
-        user_model = user_service.transform_user_model_to_schema(user)
-    
-        response = UserInfoSchema(
-            user_info=user_model
-        )
-        
-        return response
-        
     except HTTPException as e:
         raise e
     

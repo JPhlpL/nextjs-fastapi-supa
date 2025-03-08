@@ -4,33 +4,29 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { getData } from '@/utils/helpers'
 import { createClient } from '@/utils/supabase/client'
-import { User } from '@supabase/supabase-js'
-
-interface Role {
-  id: string
-  title: string
-}
+import { User as SupabaseUser } from '@supabase/supabase-js'
+import { User } from '@/types/index'
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null)
-  const [roles, setRoles] = useState<Role[]>([])
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<SupabaseUser | null>(null)
+  const [role, setRole] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
-    // Set up the auth state listener
+    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           if (session?.user) {
             setUser(session.user)
-            await fetchRoles(session.user.id)
+            await fetchUserDetails(session.user.id)
           }
         } else if (event === 'SIGNED_OUT') {
           setUser(null)
-          setRoles([])
+          setRole(null)
           setIsAdmin(false)
           router.push('/login')
         }
@@ -41,13 +37,11 @@ export function useAuth() {
     const fetchUserData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
-        
         if (user) {
           setUser(user)
-          await fetchRoles(user.id)
+          await fetchUserDetails(user.id)
         } else {
           setUser(null)
-          // Only redirect if not already on login or register page
           const path = window.location.pathname
           if (path !== '/login' && path !== '/register' && !path.startsWith('/auth')) {
             router.push('/login')
@@ -63,23 +57,22 @@ export function useAuth() {
 
     fetchUserData()
 
-    // Clean up the subscription
     return () => {
       subscription.unsubscribe()
     }
   }, [router, supabase])
 
-  const fetchRoles = async (userId: string) => {
+  const fetchUserDetails = async (userId: string) => {
     try {
-      const response = await getData<Role[]>({
-        url: `${process.env.NEXT_PUBLIC_API_URL}/role/get-roles-by-user/${userId}`,
-      });
-      setRoles(response);
-      setIsAdmin(response.some(role => role.title.toLowerCase() === 'admin'));
+      const response = await getData<User>({
+        url: `${process.env.NEXT_PUBLIC_API_URL}/user/get/${userId}`,
+      })
+      setRole(response.role)
+      setIsAdmin(response.role.toLowerCase() === 'admin')
     } catch (error) {
-      console.error("Error fetching roles:", error);
-      setRoles([]);
-      setIsAdmin(false);
+      console.error('Error fetching user details:', error)
+      setRole(null)
+      setIsAdmin(false)
     }
   }
 
@@ -87,7 +80,7 @@ export function useAuth() {
     try {
       await supabase.auth.signOut()
       setUser(null)
-      setRoles([])
+      setRole(null)
       setIsAdmin(false)
       router.push('/login')
     } catch (error) {
@@ -95,5 +88,5 @@ export function useAuth() {
     }
   }
 
-  return { user, roles, isAdmin, loading, signOut }
+  return { user, role, isAdmin, loading, signOut }
 }

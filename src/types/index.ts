@@ -8,7 +8,8 @@ export interface ApiError {
     email: string;
     status: string;
     createdAt: string;
-    updatedAt: string; // Ensure this is spelled correctly
+    updatedAt: string;
+    role: string;
   }
 
   export interface UserLite {
@@ -21,14 +22,6 @@ export interface ApiError {
     password: string;
     firstName: string;
     lastName: string;
-  }
-
-  export interface Role {
-    id: string;
-    title: string;
-    user_id: string;
-    createdAt: string;
-    updatedAt: string; // Ensure this is spelled correctly
   }
   
   export interface UserInfo {

@@ -7,15 +7,8 @@ export const users = pgTable('users', {
   status: varchar('status', { length: 10 }).notNull(),
   email: varchar('email', { length: 100 }).notNull().unique(),
   createdAt: timestamp('createdAt'), // Use timestamp for datetime
-  updatedAt: timestamp('updatedAt')  // Use timestamp for datetime
-});
-
-export const user_roles = pgTable('user_roles', {
-  id: char('id', { length: 36 }).primaryKey(),
-  title: varchar('title', { length: 100 }),
-  user_id: varchar('user_id', { length: 100 }),
-  createdAt: timestamp('createdAt').notNull(), // Use timestamp for datetime
-  updatedAt: timestamp('updatedAt').notNull()  // Use timestamp for datetime
+  updatedAt: timestamp('updatedAt'),  // Use timestamp for datetime
+  role: varchar('role', { length: 10 }).notNull()
 });
 
 // everytime we have changes on schema and it changes directly to the sql

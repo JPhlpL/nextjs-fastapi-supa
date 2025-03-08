@@ -47,16 +47,28 @@ export function EditUserModal({ isOpen, onClose, user, onSave }: EditUserModalPr
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="id" className="text-right">
-                ID
+              <Label htmlFor="name" className="text-right">
+                Name
               </Label>
-              <Input id="id" name="id" value={editedUser .id} onChange={handleInputChange} className="col-span-3" disabled />
+              <Input id="name" name="name" value={editedUser .name} onChange={handleInputChange} className="col-span-3" disabled />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email" className="text-right">
                 Email
               </Label>
-              <Input id="email" name="email" value={editedUser .email} onChange={handleInputChange} className="col-span-3" />
+              <Input id="email" name="email" value={editedUser .email} onChange={handleInputChange} className="col-span-3" disabled />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="status" className="text-right">
+              Status
+              </Label>
+              <Input id="status" name="status" value={editedUser .status} onChange={handleInputChange} className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="role" className="text-right">
+              Role
+              </Label>
+              <Input id="role" name="role" value={editedUser .role} onChange={handleInputChange} className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

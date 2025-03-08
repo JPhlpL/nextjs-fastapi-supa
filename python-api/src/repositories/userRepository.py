@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
+from sqlalchemy import update
 from src.models.models import User
 from src.wrappers.dbSessionWrapper import with_db_session
 from src.utils.logger import setup_logger
@@ -44,18 +45,15 @@ class UserRepository:
     @with_db_session
     def get_all_users(self, scoped_db: Session) -> list[User]:
         try:
-            logger.info(f"Fetching all users")
-            db_user = scoped_db.query(User).all()
-
-            if not db_user:
-              logger.info(f"No users found")
-              return None
-          
-            
-            return db_user
-        
+            logger.info("Fetching all users")
+            db_users = (
+                scoped_db.query(User)
+                # .options(selectinload(User.roles)) # For join, and need to use selectinload linkage to the class if need to join, also if needed always on fetching
+                .all()
+            )
+            return db_users
         except Exception as e:
-            logger.error(f"Error getting user all users: {e}")
+            logger.error(f"Error getting all users: {e}")
             raise Exception(f"Error in UserRepository.get_all_users: {e}")
         
     @with_db_session
@@ -77,24 +75,39 @@ class UserRepository:
             raise Exception(f"Error in UserRepository.create_user: {e}")
         
     @with_db_session
-    def update_user(self, user_id: UUID, user: User, scoped_db: Session ) -> User:
+    def update_user(self, user_id: UUID, updated_data: dict[str, any], scoped_db: Session) -> User:
         try:
             logger.info(f"Updating user with ID: {user_id}")
-            db_user = scoped_db.query(User).filter(User.id == str(user_id)).first()
 
-            if db_user:
-                # Update fields except id and createdAt
-                if user.email:
-                    db_user.email = user.email
-                if user.name:
-                    db_user.name = user.name
-                db_user.updatedAt = datetime.now(timezone.utc)
+            # Create the update statement
+            update_stmt = (
+                update(User)
+                .where(User.id == str(user_id))
+                .values(**updated_data)
+                .execution_options(synchronize_session="fetch")
+            )
 
-                scoped_db.commit()
-                scoped_db.refresh(db_user)
-                return db_user
-            else:
-                raise Exception("User not found")
+            # Execute the update statement
+            result = scoped_db.execute(update_stmt)
+            scoped_db.commit()
+
+            # Check if any rows were updated
+            if result.rowcount == 0:
+                raise ValueError(f"User  with ID {user_id} was not found or no changes were made.")
+
+            # Fetch the updated user
+            updated_user = (
+                scoped_db.query(User)
+                .filter(User.id == str(user_id))
+                .first()
+            )
+
+            if updated_user is None:
+                raise ValueError(f"User  with ID {user_id} was not found after update.")
+
+            logger.info(f"User  with ID: {user_id} updated successfully.")
+            return updated_user
+
         except Exception as e:
             logger.error(f"Error updating user in repository: {e}")
             scoped_db.rollback()

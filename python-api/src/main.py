@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.routers import (
-    users, 
-    roles
+    users
 ) # Import the user router from the router directory
 
 # Initialize FastAPI and call it 'app'
@@ -28,6 +27,3 @@ app.add_middleware(
 
 # Include the user router
 app.include_router(users.router)
-app.include_router(roles.router)
-
-# TODO: Add Router for Roles and make an enum for role (User, Admin, Super Admin)
