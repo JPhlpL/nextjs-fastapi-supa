@@ -22,10 +22,10 @@ app = App(name=API_STUB_NAME)  # type: ignore
 @app.function(
     image=api_image,
     secrets=[Secret.from_name(SECRETS_NAME, environment_name=secrets_env)],
-    # cloud="oci",  # aws, gcp, oci, auto. We choose oci for better latency with db, as we
-    # allow_concurrent_inputs=1000,
-    # region=("us-east"),
-    # timeout=60 * 60,  # set an appropriate timeout (here, 1 hour)
+    cloud="auto",  # aws, gcp, oci, auto
+    allow_concurrent_inputs=1000,
+    region=("us-east"), #ap-southeast
+    timeout=60 * 60,  # set an appropriate timeout (here, 1 hour)
 )
 @asgi_app()
 def fastapi_app():
@@ -34,7 +34,7 @@ def fastapi_app():
 
     logger = setup_logger()
     logger.info(
-        f"FastAPI app started"
+        f"FastAPI app started in region {os.environ['MODAL_REGION']} with cloud provider {os.environ['MODAL_CLOUD_PROVIDER']} with image id {os.environ['MODAL_IMAGE_ID']}"
     )
 
     return web_app
