@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { db } from '@/db'
 import { users } from '@/db/schema'
 import { eq, or } from 'drizzle-orm'
-import bcrypt from 'bcrypt'
 import * as jose from 'jose'
 
 const JWT_SECRET = process.env.JWT_SECRET

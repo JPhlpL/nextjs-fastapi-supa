@@ -35,7 +35,7 @@ export default function RegistrationForm() {
   const [isLinkedinLoading, setIsLinkedinLoading] = useState(false);
   const [isAzureLoading, setIsAzureLoading] = useState(false);
   const router = useRouter()
-  const { signIn, signInWithOAuth } = useAuth()
+  const { signInWithOAuth } = useAuth()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value })

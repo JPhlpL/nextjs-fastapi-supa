@@ -44,12 +44,3 @@ export async function GET() {
     })
   }
 }
-
-// The POST method is no longer needed as Supabase handles authentication
-// You can remove it or keep it as a fallback during transition
-export async function POST(request: Request) {
-  return NextResponse.json(
-    { error: "This endpoint is deprecated. Please use Supabase authentication." }, 
-    { status: 400 }
-  )
-}
