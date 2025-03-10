@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from src.utils.logger import setup_logfire
 from src.routers import (
     users
 ) # Import the user router from the router directory
 
 # Initialize FastAPI and call it 'app'
 app = FastAPI()
+
+setup_logfire(app)
 
 # Allow CORS for specific origins
 origins = [
