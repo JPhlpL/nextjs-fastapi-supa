@@ -1,3 +1,31 @@
+## Current Stack That Used:
+
+- NextJS (v14) - FrontEnd
+  - Drizzle
+  - ShadCN
+  - lucide-react
+  - Tailwind CSS
+  - App Router
+  - Typescript
+  - Vercel
+  - eslint
+- FastAPI - BackEnd
+  - Modal (Container)
+  - SQLAlchemy (For ORM)
+  - mypy (Linting)
+  - Pattern (router->service->repository)
+  - Logfire (For Logging)
+  - Pydantic (Data Models)
+- Supabase - Database
+  - PostgreSQL
+  - Login/Signup OAuth
+    - Github
+    - Google
+    - Azure/Microsoft
+    - Linkedin
+    - Facebook
+    - Twitter
+
 ## Front-End ( ReactJS / NextJS):
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
