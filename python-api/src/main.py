@@ -6,17 +6,18 @@ from src.defaults import (
     MODAL_DEVELOPMENT_ENVIRONMENT,
     SECRETS_NAME
 )
-from src.images import api_image  # import the API image from images.py
+from src.images import api_image
 
 MODAL_ENVIRONMENT = os.environ.get("MODAL_ENVIRONMENT")
 is_production = MODAL_ENVIRONMENT == MODAL_PRODUCTION_ENVIRONMENT
-# For local, we still point to development secrets so we don't need to manage specific secrets
+
 secrets_env = (
     MODAL_PRODUCTION_ENVIRONMENT if is_production else MODAL_DEVELOPMENT_ENVIRONMENT
 )
 
-# Create a Modal App instance.
+
 app = App(name=API_STUB_NAME)
+
 
 # Wrap your FastAPI app in a Modal function.
 @app.function( # type: ignore
