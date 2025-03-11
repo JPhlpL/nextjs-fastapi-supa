@@ -15,7 +15,6 @@ secrets_env = (
     MODAL_PRODUCTION_ENVIRONMENT if is_production else MODAL_DEVELOPMENT_ENVIRONMENT
 )
 
-
 app = App(name=API_STUB_NAME)
 
 
