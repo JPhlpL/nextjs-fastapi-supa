@@ -17,7 +17,6 @@ secrets_env = (
 
 app = App(name=API_STUB_NAME)
 
-
 # Wrap your FastAPI app in a Modal function.
 @app.function( # type: ignore
     image=api_image,
