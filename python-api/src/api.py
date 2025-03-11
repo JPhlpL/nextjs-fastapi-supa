@@ -12,7 +12,8 @@ origins = [
     "http://localhost:3000",
     "http://10.73.130.177:3000",
     "http://10.74.12.26:3000",
-    "http://172.24.68.121:3000"
+    "http://172.24.68.121:3000",
+    "https://nextjs-fastapi-supa.vercel.app" # THIS WILL BE YOUR DOMAIN ON YOUR FRONTEND
 ]
 
 web_app.add_middleware(
