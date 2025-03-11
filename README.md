@@ -153,6 +153,7 @@ PS: Make sure that you have currently setup supabase project
 8. Make sure that you run also all migrations (/migrations/*.sql) to setup a trigger and function
 
 ## Authentication Setup:
+COMING SOON...
 
 ## Steps on how to setup whole project:
 COMING SOON...
