@@ -1,0 +1,47 @@
+name: Modal Container CI/CD Process
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'python-api/**' # File changes within python-api
+
+jobs:
+  deploy:
+    name: Deploy to the Backend Container
+    runs-on: ubuntu-latest
+    env:
+      MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+      MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Installation of Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('python-api/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r python-api/requirements.txt
+
+      - name: Set GIT_HASH
+        run: echo "GIT_HASH=${GITHUB_SHA}" >> $GITHUB_ENV
+
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cd python-api/
+          MODAL_ENVIRONMENT="main" MODAL_IMAGE_BUILDER_VERSION=2024.10 modal deploy src.main --tag ${{ env.GIT_HASH }}
