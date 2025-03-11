@@ -46,9 +46,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Generate JWT Secret
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
-Samples:
-![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
-
 ## Backend (FastAPI):
 
 Tutorial:
@@ -97,3 +94,19 @@ modal config set-environment main
 `
 modal deploy src.main --tag $(GIT_HASH)  ($(GIT_HASH) or the manual value of git rev-parse HEAD)
 `
+
+## Supabase (PostgreSQL)
+
+Samples:
+![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
+
+## PS: Make sure that you have currently setup supabase project
+
+## Walkthrough:
+1. Make sure that you correctly setup the schema.ts
+2. nvm use 20.12
+3. npx drizzle-kit generate
+4. npx drizzle-kit push
+5. Go to `supabase.com`
+6. Go to table editor
+7. Verify if your drizzle migrates to your supabase
