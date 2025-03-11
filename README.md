@@ -1,4 +1,4 @@
-## Current Stack That Used:
+## Current Stacks That Used:
 
 - NextJS (v14) - FrontEnd
   - Drizzle (ORM)
