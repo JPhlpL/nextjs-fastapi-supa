@@ -5,13 +5,14 @@ from src.wrappers.dbSessionWrapper import with_db_session
 from src.utils.logger import setup_logger
 from uuid import UUID
 from datetime import datetime, timezone
+from typing import Optional, Any
 logger = setup_logger()
 
 
 class UserRepository:
     
     @with_db_session
-    def get_user(self, user_id: UUID, scoped_db: Session) -> User:
+    def get_user(self, user_id: UUID, scoped_db: Session) -> Optional[User]:
         try:
             logger.info(f"Fetching user with ID: {user_id}")
             db_user = scoped_db.query(User).filter(User.id == str(user_id)).first()
@@ -27,7 +28,7 @@ class UserRepository:
             raise Exception(f"Error in UserRepository.get_user: {e}")
         
     @with_db_session
-    def get_user_by_email(self, email: str, scoped_db: Session) -> User:
+    def get_user_by_email(self, email: str, scoped_db: Session) -> Optional[User]:
         try:
             logger.info(f"Fetching user with ID: {email}")
             db_user = scoped_db.query(User).filter(User.email == str(email)).first()
@@ -75,7 +76,7 @@ class UserRepository:
             raise Exception(f"Error in UserRepository.create_user: {e}")
         
     @with_db_session
-    def update_user(self, user_id: UUID, updated_data: dict[str, any], scoped_db: Session) -> User:
+    def update_user(self, user_id: UUID, updated_data: dict[str, Any], scoped_db: Session) -> User:
         try:
             logger.info(f"Updating user with ID: {user_id}")
 

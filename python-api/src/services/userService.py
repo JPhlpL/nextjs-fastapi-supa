@@ -4,12 +4,15 @@ from src.models.models import User
 from src.utils.logger import setup_logger
 from uuid import UUID
 from fastapi import HTTPException  # Import HTTPException
+from typing import Any, Optional
 
 
 logger = setup_logger()
 
 class UserService:
-    def __init__(self):
+    def __init__(
+        self
+    ) -> None:
         self.user_repository = UserRepository()
 
     # ====================== Database Call ==================================
@@ -67,7 +70,7 @@ class UserService:
         except HTTPException as e:
             raise e
 
-    def update_user(self, user_id: UUID, updated_data: dict[str, any]) -> User:
+    def update_user(self, user_id: UUID, updated_data: dict[str, Any]) -> User:
         try:
             logger.info(f"Updating user with user_id: {user_id}")
             db_user = self.user_repository.update_user(user_id, updated_data)

@@ -38,7 +38,7 @@ logfire==3.7.1
 markdown-it-py==3.0.0
 mdurl==0.1.2
 multidict==6.1.0
-mypy==1.11.2
+mypy==1.14
 mypy-extensions==1.0.0
 mysql-connector==2.2.9
 mysql-connector-python==9.0.0
