@@ -15,5 +15,5 @@ export async function GET() {
   })
   
   // Redirect to login page
-  return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'))
+  return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_SITE_URL || 'https://nextjs-fastapi-supa.vercel.app' || 'http://localhost:3000'))
 }
