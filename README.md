@@ -18,6 +18,7 @@
   - Pydantic (Data Models)
 - Supabase - Database
   - PostgreSQL
+  - Session Tokens
   - Login/Signup OAuth
     - Github
     - Google
