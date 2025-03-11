@@ -12,7 +12,10 @@ def get_database_url() -> str:
     """
     Retrieves the database URL from environment variables.
     """
-    return os.getenv("POSTGRE_DB_CONNECTION_WITH_PASSWORD")
+    db_env = os.getenv("POSTGRE_DB_CONNECTION_WITH_PASSWORD")
+    if not db_env:
+        raise ValueError("POSTGRE_DB_CONNECTION_WITH_PASSWORD is not set")
+    return db_env
 
 def get_database_engine() -> Engine:
     """

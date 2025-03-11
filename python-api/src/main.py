@@ -16,10 +16,10 @@ secrets_env = (
 )
 
 # Create a Modal App instance.
-app = App(name=API_STUB_NAME)  # type: ignore
+app = App(name=API_STUB_NAME)
 
 # Wrap your FastAPI app in a Modal function.
-@app.function(
+@app.function( # type: ignore
     image=api_image,
     secrets=[Secret.from_name(SECRETS_NAME, environment_name=secrets_env)],
     cloud="auto",  # aws, gcp, oci, auto
@@ -40,7 +40,7 @@ def fastapi_app():
     return web_app
 
 # local entrypoints for testing
-@app.local_entrypoint()  # type: ignore
+@app.local_entrypoint() 
 def main() -> None:
 
     return None

@@ -1,0 +1,37 @@
+name: Verify Mypy Types
+
+on: [push]
+
+jobs:
+  mypy:
+    runs-on: ubuntu-latest
+    name: Run mypy on every push request
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('python-api/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r python-api/requirements.txt
+
+      - name: Run mypy
+        run: |
+          mypy --config-file python-api/mypy.ini python-api/src/
+        continue-on-error: false
