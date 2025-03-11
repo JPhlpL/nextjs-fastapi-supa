@@ -1,14 +1,14 @@
 ## Current Stack That Used:
 
 - NextJS (v14) - FrontEnd
-  - Drizzle
-  - ShadCN
-  - lucide-react
-  - Tailwind CSS
-  - App Router
-  - Typescript
-  - Vercel
-  - eslint
+  - Drizzle (ORM)
+  - Shadcn (UI Component)
+  - lucide-react (Icons)
+  - Tailwind CSS (CSS)
+  - App Router (Page Pattern)
+  - Typescript (Types)
+  - Vercel (Hosting)
+  - eslint (Linting)
 - FastAPI - BackEnd
   - Modal (Container)
   - SQLAlchemy (For ORM)
