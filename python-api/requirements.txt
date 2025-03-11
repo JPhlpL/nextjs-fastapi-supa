@@ -74,7 +74,6 @@ pypiwin32==223
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
-pywin32==308
 PyYAML==6.0.2
 realtime==2.0.5
 requests==2.32.3
