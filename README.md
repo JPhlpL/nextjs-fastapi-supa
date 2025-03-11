@@ -97,10 +97,7 @@ modal deploy src.main --tag $(GIT_HASH)  ($(GIT_HASH) or the manual value of git
 
 ## Supabase (PostgreSQL)
 
-Samples:
-![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
-
-## PS: Make sure that you have currently setup supabase project
+PS: Make sure that you have currently setup supabase project
 
 ## Walkthrough:
 1. Make sure that you correctly setup the schema.ts
@@ -110,3 +107,12 @@ Samples:
 5. Go to `supabase.com`
 6. Go to table editor
 7. Verify if your drizzle migrates to your supabase
+8. Make sure that you run also all migrations (/migrations/*.sql) to setup a trigger and function
+
+## Authentication Setup:
+
+## Steps on how to setup whole project:
+COMING SOON...
+
+## Some Screenshots:
+![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
