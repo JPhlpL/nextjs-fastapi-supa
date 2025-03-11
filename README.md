@@ -75,6 +75,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Generate JWT Secret
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
+## Vercel Deployment
+COMING SOON...
+
 ## Backend (Python / FastAPI):
 
 Tutorial:
