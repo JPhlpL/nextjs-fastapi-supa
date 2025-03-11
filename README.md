@@ -1,4 +1,5 @@
-Front-End (NextJS):
+## Front-End (NextJS):
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -48,7 +49,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 Samples:
 ![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
 
-Backend (FastAPI):
+## Backend (FastAPI):
 
 Tutorial:
 `
@@ -65,7 +66,7 @@ To export libraries
 pip freeze > requirements.txt
 `
 
-MODAL CONTAINER (modal.com)
+## MODAL CONTAINER (modal.com)
 
 FIRST SETUP:
 - make sure installed modal on python
@@ -78,11 +79,11 @@ CONTAINER INTIALIZATION:
 - modal token set --token-id <token_id> --token-secret <token_secret> --profile=<workspace_name>
 - modal profile activate <workspace_name>
 
-TO SERVE IN MODAL CONTAINER (For local testing purposes)
+## TO SERVE IN MODAL CONTAINER (For local testing purposes)
 modal config set-environment development
 modal serve src.main
 
-TO DEPLOY ON PROD (MAIN)
+## TO DEPLOY ON PROD (MAIN)
 modal config set-environment main
 modal deploy src.main --tag $(GIT_HASH)  ($(GIT_HASH) or the manual value of git rev-parse HEAD)
 
