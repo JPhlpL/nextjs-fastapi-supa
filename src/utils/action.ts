@@ -52,7 +52,7 @@ export async function signup(formData: FormData) {
         full_name: displayName || email.split('@')[0], // Use email username as fallback
         name: displayName || email.split('@')[0],
       },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      emailRedirectTo: process.env.NEXT_PUBLIC_SITE_URL+'/auth/callback',
     },
   })
 
