@@ -9,6 +9,7 @@
   - Typescript (Types)
   - Vercel (Hosting)
   - eslint (Linting)
+
 - FastAPI - BackEnd
   - Modal (Container)
   - SQLAlchemy (For ORM)
@@ -16,6 +17,7 @@
   - Pattern (router->service->repository)
   - Logfire (For Logging)
   - Pydantic (Data Models)
+
 - Supabase - Database
   - PostgreSQL
   - Session Tokens
@@ -26,6 +28,15 @@
     - Linkedin
     - Facebook
     - Twitter
+  
+- CI/CD Utilities
+  - Github (Repository)
+    - Pull Request
+    - Protect Branch
+    - Github Actions
+  - Git (Version Control)
+  - Figma/Draw.io
+  - Postman API (API Testing)
 
 ## Front-End ( ReactJS / NextJS):
 
@@ -148,3 +159,4 @@ COMING SOON...
 
 ## Some Screenshots:
 ![image](https://github.com/user-attachments/assets/dec75b5b-4f8a-4a16-a377-88679a655922)
+
