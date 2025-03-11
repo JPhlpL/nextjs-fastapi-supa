@@ -1,4 +1,4 @@
-## Front-End (NextJS):
+## Front-End ( ReactJS / NextJS):
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -46,7 +46,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Generate JWT Secret
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
-## Backend (FastAPI):
+## Backend (Python / FastAPI):
 
 Tutorial:
 `
