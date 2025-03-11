@@ -26,7 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+.env.local
 #on .env.local
 #JWT_SECRET=<generate jwt>
 #DATABASE_URL="mysql://<username>:<password>@localhost:3306/<dbname>"
@@ -44,5 +44,4 @@ python-api/venv/
 __pycache__/
 *.log 
 # All .log file will be ignore
-.env.example
 nextjs-fastapi-supa.code-workspace
