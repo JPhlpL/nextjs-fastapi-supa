@@ -80,10 +80,20 @@ CONTAINER INTIALIZATION:
 - modal profile activate <workspace_name>
 
 ## TO SERVE IN MODAL CONTAINER (For local testing purposes)
+`
 modal config set-environment development
+`
+
+`
 modal serve src.main
+`
 
 ## TO DEPLOY ON PROD (MAIN)
-modal config set-environment main
-modal deploy src.main --tag $(GIT_HASH)  ($(GIT_HASH) or the manual value of git rev-parse HEAD)
 
+`
+modal config set-environment main
+`
+
+`
+modal deploy src.main --tag $(GIT_HASH)  ($(GIT_HASH) or the manual value of git rev-parse HEAD)
+`
