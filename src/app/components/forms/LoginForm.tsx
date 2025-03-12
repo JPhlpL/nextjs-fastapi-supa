@@ -147,7 +147,7 @@ export default function LoginForm() {
             <h1 className="text-6xl font-bold"></h1>
           </div>
           <div className="text-lg font-bold">
-            <h1 className="text-4xl font-bold">JPhil's Template</h1>
+            <h1 className="text-4xl font-bold">JPhil&apos;s Template</h1>
           </div>
           <div className="text-lg font-bold"></div>
         </div>
