@@ -21,7 +21,7 @@ export default function TopNav() {
   }
 
   return (
-    <header className="bg-white border-b sticky top-0 z-40">
+    <header className="bg-white border-b sticky top-0 z-30">
       <div className="container mx-auto px-6">
         <div className="flex items-center h-14 relative">
           {/* Left side - Burger menu */}
@@ -35,6 +35,7 @@ export default function TopNav() {
               <Menu className="h-5 w-5" />
             </Button>
           </div>
+
 
           {/* Right side - Logout button */}
           <div className="absolute right-0">

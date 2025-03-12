@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SidebarProvider>
-          <div className="flex flex-col md:flex-row h-screen bg-gray-100">
+          <div className="relative flex flex-col md:flex-row h-screen bg-gray-100">
             <SidebarBackdrop />
             <Sidebar />
             <div className="flex flex-col flex-1 overflow-hidden">

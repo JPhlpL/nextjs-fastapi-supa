@@ -67,7 +67,7 @@ export default function Sidebar() {
   return (
     <div
       className={cn(
-        "bg-gray-800 text-white w-64 space-y-6 py-7 px-2 fixed inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-in-out",
+        "bg-gray-800 text-white w-64 space-y-6 py-7 px-2 fixed inset-y-0 left-0 transform transition-transform duration-200 ease-in-out z-50",
         isOpen ? "translate-x-0" : "-translate-x-full",
         "md:relative md:translate-x-0", // Always show on medium screens and up
       )}
