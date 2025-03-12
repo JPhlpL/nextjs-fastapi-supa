@@ -27,6 +27,7 @@ yarn-error.log*
 
 # local env files
 .env.local
+.env
 #on .env.local
 #JWT_SECRET=<generate jwt>
 #DATABASE_URL="mysql://<username>:<password>@localhost:3306/<dbname>"
