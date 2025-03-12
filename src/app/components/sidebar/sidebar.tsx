@@ -73,7 +73,7 @@ export default function Sidebar() {
       )}
     >
       <div className="flex justify-between items-center px-4 mb-6">
-        <h2 className="text-xl font-bold">Template</h2>
+        <h2 className="text-xl font-bold">Greetings!</h2>
         <Button variant="ghost" size="icon" className="md:hidden" onClick={close}>
           <X className="h-5 w-5" />
         </Button>

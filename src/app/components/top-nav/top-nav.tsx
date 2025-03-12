@@ -23,26 +23,31 @@ export default function TopNav() {
   return (
     <header className="bg-white border-b sticky top-0 z-40">
       <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-14">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggle}
-            className="md:hidden text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+        <div className="flex items-center h-14 relative">
+          {/* Left side - Burger menu */}
+          <div className="absolute left-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggle}
+              className="md:hidden text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </div>
 
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleLogout}
-            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          {/* Right side - Logout button */}
+          <div className="absolute right-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
     </header>
